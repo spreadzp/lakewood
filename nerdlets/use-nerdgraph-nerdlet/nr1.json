@@ -1,6 +1,6 @@
 {
     "schemaType": "NERDLET",
     "id": "use-nerdgraph-nerdlet",
-    "displayName": "Lakewood-1",
+    "displayName": "lakewood-1",
     "description": "Use this application with the directions in the HowTo.md to learn how to use the NerdGraph compenent."
 }
