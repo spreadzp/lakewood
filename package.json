@@ -1,0 +1,27 @@
+{
+  "private": true,
+  "name": "use-nerdgraph",
+  "version": "1.19.4",
+  "scripts": {
+    "start": "nr1 nerdpack:serve",
+    "nr-start": "nr1 nerdpack:serve",
+    "nr-uuid": "nr1 nerdpack:uuid -gf",
+    "deploy": "nr1 nerdpack:deploy --channel=DEV",
+    "publish": "nr1 nerdpack:publish",
+    "subscribe": "nr1 nerdpack:subscribe --channel=DEV"
+  },
+  "nr1": {
+    "uuid": "a3658bb8-d3b0-4087-8ec9-9ba3d27b5a65"
+  },
+  "dependencies": {
+    "@newrelic/nr1-community": "^1.0.1",
+    "prop-types": "^15.6.2",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "not ie < 11",
+    "not dead"
+  ]
+}
