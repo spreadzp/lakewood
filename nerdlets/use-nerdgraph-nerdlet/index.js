@@ -52,38 +52,6 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
   render() {
     const { accountId, accounts, selectedAccount } = this.state;
     console.log({ accountId, accounts, selectedAccount });
-    const query = `
-        query($id: Int!) {
-            actor {
-                account(id: $id) {
-                    name
-                }
-            }
-        }
-    `;
-    const variables = {
-      id: accountId,
-    };
-
-    const cpuTable = "`npm.avgCPULoad`";
-    const cpuCaption = "`npm.caption`";
-    const top10CPU = `SELECT average (${cpuTable}) FROM solarwinds_interfaces where npm.environment != 'Production' and npm.vendor = 'Linux' FACET ${cpuCaption} SINCE 4 HOURS AGO TIMESERIES limit 10`;
-    const nonProdLinuxDevices =
-      "SELECT uniqueCount(npm.caption as NonProductionLinuxServers) from solarwinds_interfaces where npm.vendor = 'Linux' and npm.environment != 'Production'";
-    const relevantData =
-      "SELECT npm.caption, npm.engineid, npm.avgCPULoad, npm.avgPercentMemUsed, npm.vendor, npm.deviceid, npm.servertype, npm.department, npm.percentloss, npm.IPAddress, npm.city, npm.state, npm.coresite, npm.criticalsite, npm.hostedapplication, npm.tier from solarwinds_interfaces where npm.environment != 'Production' and npm.vendor = 'Linux' since 10 minutes ago order by npm.avgCPULoad DESC limit max";
-    const totalProdLinux =
-      "SELECT uniqueCount(npm.caption as NonProductionLinuxServers) from solarwinds_interfaces where npm.vendor = 'Linux' and npm.environment = 'Production'";
-
-    const metric = `FROM Metric SELECT count(newrelic.timeslice.value)
-WHERE appName = 'lakewood-2'
-WITH METRIC_FORMAT 'Custom/Labels/{action}'
-TIMESERIES FACET action`;
-    const avgResTime = `SELECT average(duration) FROM Transaction FACET appName TIMESERIES AUTO `;
-    const trxOverview = `FROM Transaction SELECT count(*) as 'Transactions', apdex(duration) as 'apdex', percentile(duration, 99, 95) FACET appName `;
-    const errCount = `FROM TransactionError SELECT count(*) as 'Transaction Errors' FACET error.message `;
-    const responseCodes = `SELECT count(*) as 'Response Code' FROM Transaction FACET httpResponseCode `;
-
     return (
       <Stack
         fullWidth

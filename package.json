@@ -11,7 +11,7 @@
     "subscribe": "nr1 nerdpack:subscribe --channel=DEV"
   },
   "nr1": {
-    "uuid": "e155b878-1928-4d89-b0dc-cde5fad90e45"
+    "uuid": "6bd15278-1532-41ba-9c58-9694b6c6f668"
   },
   "dependencies": {
     "@newrelic/nr1-community": "^1.0.1",

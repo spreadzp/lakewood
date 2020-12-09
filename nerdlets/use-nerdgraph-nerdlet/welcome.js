@@ -1,5 +1,6 @@
 import React from "react";
 import {
+    TableChart,
     HeadingText,
     AreaChart,
     PieChart,
@@ -19,10 +20,9 @@ export default class Welcome extends React.Component {
                {this.state.selectedData.nameQuery}
                 </HeadingText>;
         const typeTag = this.state.selectedData.typeWidget;
-       // if(typeTag) {
             switch (typeTag) {
-                case 'PieChart':
-                    response = <div> {header} <Collection parentCallback = {this.callbackFunction}/><PieChart fullWidth accountId={this.props.accountId} query={this.state.selectedData.query} /> </div>;
+                case 'TableChart':
+                    response = <div> {header} <Collection parentCallback = {this.callbackFunction}/><TableChart fullWidth accountId={this.props.accountId} query={this.state.selectedData.query} /> </div>;
                     break;
                 case 'AreaChart':
                     response = <div> {header} <Collection parentCallback = {this.callbackFunction}/><AreaChart fullWidth accountId={this.props.accountId} query={this.state.selectedData.query} /></div>;
@@ -39,7 +39,6 @@ export default class Welcome extends React.Component {
                     <PieChart fullWidth accountId={this.props.accountId} query={this.state.selectedData.query} /></div>;
                 break;
             }
-       //}
 
         return response;
 
