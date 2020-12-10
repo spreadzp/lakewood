@@ -7,7 +7,7 @@ import {
   } from "nr1";
 
   import Collection from './collection';
-  //import VidgetProvider from './vidgetProvider';
+ 
 export default class Welcome extends React.Component {
 
     state = { selectedData: {} }

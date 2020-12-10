@@ -3,6 +3,7 @@ import {
     Dropdown,
     DropdownItem
   } from "nr1";
+import RemoveItem from './remove-item';
 
 export default class Collection extends React.Component {
     constructor(props) {
@@ -61,9 +62,9 @@ export default class Collection extends React.Component {
               {account.nameQuery}
             </DropdownItem>
           ));
-          let response = <Dropdown title={this.state.selectedData.nameQuery}>
+          let response = <div><Dropdown title={this.state.selectedData.nameQuery}>
         {items}
-      </Dropdown>
+      </Dropdown><RemoveItem /></div>
 
         return response;
 

@@ -4,6 +4,7 @@ import {
   NerdGraphQuery,
   Spinner,
   HeadingText,
+  Button,
   Grid,
   GridItem,
   Stack,
@@ -16,7 +17,9 @@ import {
   Input,
 } from "nr1";
 import { timeRangeToNrql } from "@newrelic/nr1-community";
+
 import Welcome from "./welcome";
+import AddItem from './add-item';
 
 export default class UseNerdgraphNerdletNerdlet extends React.Component {
   constructor(props) {
@@ -62,6 +65,7 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
       >
         <StackItem>
           <hr />
+         <AddItem />
           <PlatformStateContext.Consumer>
             {(PlatformState) => {
               /* Taking a peek at the PlatformState */
