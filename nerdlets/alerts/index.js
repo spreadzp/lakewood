@@ -20,11 +20,7 @@ import {
 } from "nr1";
 import { timeRangeToNrql } from "@newrelic/nr1-community";
 
-import Welcome from "./welcome";
-import AddItem from "./add-item";
-import RemoveItem from "./remove-item";
 import Heatmap from "./../../components/heat-map";
-import bytesToSize from "./../../lib/bytes-to-size";
 import listQueries from "./../../queries.json";
 
 export default class UseNerdgraphNerdletNerdlet extends React.Component {
@@ -79,6 +75,7 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
     const { accountId, accounts, selectedAccount } = this.state;
     const MEGABYTE = 1024 * 1024;
     console.debug("@@@@@", { accountId, accounts, selectedAccount });
+    //setInterval(() => {
     return (
       <Stack
         fullWidth
@@ -107,18 +104,20 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
                       columnSpan={8}
                     >
                       <main className="primary-content full-height">
-                        {queries.map((item) => {
+                        {
+
+                            queries.map((item) => {
                           console.debug("item", item);
                           return (
                             <Heatmap
                               accountId={accountId}
                               query={item.query}
-                              key={"plot.title"}
+                              key={item.id}
                               title={item.title}
-                              formatLabel={(c) => c.slice(0, 6)}
-                              formatValue={(value) => `${94}%`}
+                              formatLabel={(c) => c.slice(0, 18)}
+                              formatValue={(value) => `${value}`}
                               selection={this.statecontainerId}
-                              max={"100%"}
+                              max={item.value}
                               red={item.red}
                               orange={item.orange}
                               onSelect={(row) => {
@@ -127,11 +126,13 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
                               }}
                               onClickTitle={(row) => {
                                 console.debug("onClickTitle", row); //eslint-disable-line
-                                this.openEntity(row);
+                                this.openEntity(item.id);
                               }}
                             />
                           );
-                        })}
+                        })
+
+                      }
                       </main>
                     </GridItem>
                   </Grid>
@@ -141,7 +142,7 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
           </PlatformStateContext.Consumer>
         </StackItem>
       </Stack>
-    );
+    ) // }, 60000)
   }
 }
 

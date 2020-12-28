@@ -193,9 +193,7 @@ function SingleHeatmap(props) {
             {title}
           </span>
         </StackItem>
-        <StackItem>
-          <Legend {...props} />
-        </StackItem>
+
       </Stack>
       <div className="heat-map-grid">
         {data.map((datum) => {
@@ -214,6 +212,10 @@ function SingleHeatmap(props) {
     </div>
   );
 }
+
+// <StackItem>
+// <Legend {...props} />
+// </StackItem>
 
 function GroupedHeatMap(props) {
   const { data } = props;

@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "lakewood-3",
+  "name": "lakewood-4",
   "version": "1.19.4",
   "scripts": {
     "start": "nr1 nerdpack:serve",
@@ -14,7 +14,7 @@
     "subscription:list": "nr1 subscription:list"
   },
   "nr1": {
-    "uuid": "5c7db061-7779-4991-adb0-fb771e9b2d4c"
+    "uuid": "8aced860-b249-40a3-849a-958ade5d3e48"
   },
   "dependencies": {
     "prop-types": "^15.6.2",
