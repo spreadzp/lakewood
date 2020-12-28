@@ -2,5 +2,6 @@
     "schemaType": "NERDLET",
     "id": "use-nerdgraph-nerdlet",
     "displayName": "lakewood-3",
+    "entities": [{"domain": "BROWSER", "type": "APPLICATION"}],
     "description": "Use this application with the directions in the HowTo.md to learn how to use the NerdGraph compenent."
 }

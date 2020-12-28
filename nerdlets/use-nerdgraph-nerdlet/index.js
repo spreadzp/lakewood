@@ -15,19 +15,27 @@ import {
   TableChart,
   PieChart,
   Input,
+  Label,
+  navigation,
 } from "nr1";
 import { timeRangeToNrql } from "@newrelic/nr1-community";
 
 import Welcome from "./welcome";
-import AddItem from './add-item';
+import AddItem from "./add-item";
+import RemoveItem from "./remove-item";
+import Heatmap from "./../../components/heat-map";
+import bytesToSize from "./../../lib/bytes-to-size";
+import listQueries from "./queries.json";
 
 export default class UseNerdgraphNerdletNerdlet extends React.Component {
   constructor(props) {
     super(props);
+    this.selectContainer = this.selectContainer.bind(this);
+    this.openEntity = this.openEntity.bind(this);
     this.state = {
-      accountId: 2724907,
+      accountId: 1104476,
       accounts: null,
-      selectedAccount: null,
+      selectedAccount: 1104476,
     };
   }
 
@@ -37,24 +45,34 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
     const accounts = NerdGraphQuery.query({ query: gql });
     accounts
       .then((results) => {
-        console.log("Nerdgraph Response:", results);
+        console.debug("Nerdgraph Response:", results);
         const accounts = results.data.actor.accounts.map((account) => {
           return account;
         });
         const account = accounts.length > 0 && accounts[0];
-        this.setState({ selectedAccount: account, accounts });
+        this.setState({ selectedAccount: 1104476, accounts });
       })
       .catch((error) => {
-        console.log("Nerdgraph Error:", error);
+        console.debug("Nerdgraph Error:", error);
       });
+  }
+  selectContainer(containerId) {
+    this.setState({ containerId });
+  }
+
+  openEntity(entityGuid) {
+    navigation.openStackedEntity(entityGuid);
   }
   selectAccount(option) {
     this.setState({ accountId: option.id, selectedAccount: option });
   }
 
   render() {
+    const queries = listQueries;
+
     const { accountId, accounts, selectedAccount } = this.state;
-    console.log({ accountId, accounts, selectedAccount });
+    const MEGABYTE = 1024 * 1024;
+    console.debug("@@@@@", { accountId, accounts, selectedAccount });
     return (
       <Stack
         fullWidth
@@ -65,7 +83,6 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
       >
         <StackItem>
           <hr />
-         <AddItem />
           <PlatformStateContext.Consumer>
             {(PlatformState) => {
               /* Taking a peek at the PlatformState */
@@ -84,32 +101,31 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
                       columnSpan={6}
                     >
                       <main className="primary-content full-height">
-                        <Welcome fullWidth accountId={accountId} />
-                      </main>
-                    </GridItem>
-
-                    <GridItem
-                      className="primary-content-container"
-                      columnSpan={6}
-                    >
-                      <main className="primary-content full-height">
-                        <Welcome fullWidth accountId={accountId} />
-                      </main>
-                    </GridItem>
-                    <GridItem
-                      className="primary-content-container"
-                      columnSpan={6}
-                    >
-                      <main className="primary-content full-height">
-                        <Welcome fullWidth accountId={accountId} />
-                      </main>
-                    </GridItem>
-                    <GridItem
-                      className="primary-content-container"
-                      columnSpan={6}
-                    >
-                      <main className="primary-content full-height">
-                        <Welcome fullWidth accountId={accountId} />
+                        {queries.map((item) => {
+                          console.debug("item", item);
+                          return (
+                            <Heatmap
+                              accountId={accountId}
+                              query={item.query}
+                              key={"plot.title"}
+                              title={item.title}
+                              formatLabel={(c) => c.slice(0, 6)}
+                              formatValue={(value) => `${94}%`}
+                              selection={this.statecontainerId}
+                              max={"100%"}
+                              red={item.red}
+                              orange={item.orange}
+                              onSelect={(row) => {
+                                console.debug("onSelect", row); //eslint-disable-line
+                                this.openEntity(row);
+                              }}
+                              onClickTitle={(row) => {
+                                console.debug("onClickTitle", row); //eslint-disable-line
+                                this.openEntity(row);
+                              }}
+                            />
+                          );
+                        })}
                       </main>
                     </GridItem>
                   </Grid>
@@ -122,3 +138,4 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
     );
   }
 }
+

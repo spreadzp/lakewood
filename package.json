@@ -8,16 +8,21 @@
     "nr-uuid": "nr1 nerdpack:uuid -gf",
     "publish": "nr1 nerdpack:publish",
     "deploy": "nr1 nerdpack:deploy --channel=DEV",
-    "subscribe": "nr1 nerdpack:subscribe --channel=DEV"
+    "subscribe": "nr1 nerdpack:subscribe --channel=DEV",
+    "validate": "nr1 nerdpack:validate",
+    "nrql": "nr1 nrql 'SELECT * FROM Transaction FACET appName TIMESERIES AUTO'",
+    "subscription:list": "nr1 subscription:list"
   },
   "nr1": {
-    "uuid": "d3ed0b8c-e442-488f-a075-8153d524c998"
+    "uuid": "5c7db061-7779-4991-adb0-fb771e9b2d4c"
   },
   "dependencies": {
-    "@newrelic/nr1-community": "^1.0.1",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
-    "react-dom": "^16.6.3"
+    "react-dom": "^16.6.3",
+    "@newrelic/nr1-community": "^1.2.0",
+    "hsl-to-hex": "^1.0.0",
+    "lodash": "^4.17.19"
   },
   "browserslist": [
     "last 2 versions",
