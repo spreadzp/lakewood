@@ -2,17 +2,30 @@ import React from "react";
 import {
   PlatformStateContext,
   NerdGraphQuery,
+  NerdletStateContext,
+  Spinner,
+  HeadingText,
+  Button,
   Grid,
   GridItem,
   Stack,
   StackItem,
+  Select,
+  SelectItem,
+  AreaChart,
+  TableChart,
+  PieChart,
+  Input,
+  Label,
   navigation,
+  nerdlet
 } from "nr1";
 import { timeRangeToNrql } from "@newrelic/nr1-community";
+
 import Heatmap from "./../../components/heat-map";
 import listQueries from "./../../queries.json";
 
-export default class UseNerdgraphNerdletNerdlet extends React.Component {
+export default class AlertNerdlet extends React.Component {
   constructor(props) {
     super(props);
     this.selectContainer = this.selectContainer.bind(this);
@@ -25,6 +38,7 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
   }
 
   componentDidMount() {
+    const accountId = this.state;
     const gql = `{ actor { accounts { id name } } }`;
     const accounts = NerdGraphQuery.query({ query: gql });
     accounts
@@ -33,6 +47,7 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
         const accounts = results.data.actor.accounts.map((account) => {
           return account;
         });
+        const account = accounts.length > 0 && accounts[0];
         this.setState({ selectedAccount: 1104476, accounts });
       })
       .catch((error) => {
@@ -43,11 +58,11 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
     this.setState({ containerId });
   }
 
-  openEntity(queryItem) {
+  openEntity(item) {
     const nerdletWithState = {
-      id: "alerts",
+      id: 'details',
       urlState: {
-        selectedQuery: [queryItem],
+        itemQuery: item,
       },
     };
     return navigation.openStackedNerdlet(nerdletWithState);
@@ -58,9 +73,8 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
 
   render() {
     const queries = listQueries;
-
     const { accountId, accounts, selectedAccount } = this.state;
-    console.debug("@@@@@", { accountId, accounts, selectedAccount });
+    //setInterval(() => {
     return (
       <Stack
         fullWidth
@@ -76,7 +90,9 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
               /* Taking a peek at the PlatformState */
               const since = timeRangeToNrql(PlatformState);
               return (
-                <>
+                <NerdletStateContext.Consumer>
+                {(nerdletUrlState) => (
+
                   <Grid
                     className="primary-grid"
                     spacingType={[
@@ -89,39 +105,50 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
                       columnSpan={8}
                     >
                       <main className="primary-content full-height">
-                        {queries.map((item) => {
+                        {
+
+                          nerdletUrlState.selectedQuery.map((item) => {
+
+
                           return (
                             <Heatmap
                               accountId={accountId}
                               query={item.query}
-                              key={"plot.title"}
+                              key={item.id}
                               title={item.title}
-                              formatLabel={(c) => c.slice(0, 6)}
-                              formatValue={(value) => `${94}%`}
+                              formatLabel={(c) => c.slice(0, 18)}
+                              formatValue={(value) => `${value}`}
                               selection={item.query}
-                              max={"100%"}
+                              max={item.value}
                               red={item.red}
                               orange={item.orange}
                               onSelect={(row) => {
                                 console.debug("onSelect", row); //eslint-disable-line
+                                console.log('##########item :>> ', item);
+                                item.queryItem = item.queryItem + `'${row}'`;
                                 this.openEntity(item);
                               }}
-                              onClickTitle={(row) => {
-                                console.debug("onClickTitle", row); //eslint-disable-line
+                              onClickTitle={(item) => {
+                                console.debug("onClickTitle", item); //eslint-disable-line
                                 this.openEntity(item);
                               }}
                             />
                           );
-                        })}
+                        })
+
+                      }
                       </main>
                     </GridItem>
                   </Grid>
-                </>
+                  )}
+                  </NerdletStateContext.Consumer>
               );
+
             }}
           </PlatformStateContext.Consumer>
         </StackItem>
       </Stack>
-    );
+    ) // }, 60000)
   }
 }
+
