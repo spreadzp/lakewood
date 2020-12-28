@@ -1,7 +1,7 @@
 {
     "schemaType": "LAUNCHER",
     "id": "use-nerdgraph-launcher",
-    "displayName": "lakewood-3",
+    "displayName": "lakewood-4",
     "description": "Launch the how to NerdGraph nr1 component",
     "rootNerdletId": "use-nerdgraph-nerdlet"
 }

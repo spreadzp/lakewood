@@ -1,0 +1,7 @@
+{
+    "schemaType": "NERDLET",
+    "id": "details",
+    "displayName": "lakewood-4",
+    "entities": [{"domain": "BROWSER", "type": "APPLICATION"}],
+    "description": "details"
+}

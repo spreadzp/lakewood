@@ -104,24 +104,24 @@ export default class Heatmap extends React.Component {
   };
 
   render() {
-    let { accountId, query, max } = this.props;
-
+    let { accountId, query, max, selection } = this.props;
+const qw = (selection) ? selection : query;
     return (
       <NrqlQuery
         accountId={accountId}
-        query={query}
+        query={qw}
         formatType={NrqlQuery.FORMAT_TYPE.RAW}
       >
         {({ loading, error, data }) => {
           if (loading) return <div />;
           if (error) return <pre>{error}</pre>;
           if (!data.facets) {
-            console.log("Bad result", query, error, data);
+            console.log("Bad result", qw, error, data);
             return <div />;
           }
 
           const preparedData = prepare({ data, max });
-          console.debug(preparedData);
+
           // if facet is a string, then render a single heatmap;
           // otherwise render a group of them
           if (!preparedData.isMultiFacet) {
@@ -148,16 +148,13 @@ function Node(props) {
     orange,
   } = props;
   const maxim = isNaN(max) ? Math.max(...props.data.map((o) => o.value)) : max;
-  console.debug("props", props);
+  // console.debug("props", props);
 
   const normalizedValue = Math.max(Math.min(value / maxim, 1), 0);
-  console.log(
-    "🚀 ~ file: heat-map.js ~ line 136 ~ Node ~ normalizedValue",
-    normalizedValue
-  );
+
   // const color = heatMapColor(normalizedValue)
   const color = setColor(value, red, orange);
-  console.debug("color", color);
+  // console.debug("color", color);
   const formattedValue = value; // formatValue ? formatValue(value) : value
   const formattedLabel = formatLabel ? formatLabel(name) : name;
 
@@ -227,7 +224,7 @@ function GroupedHeatMap(props) {
     <div>
       {groupNames.map((groupName) => {
         const group = groups[groupName];
-        console.debug("group", group);
+        // console.debug("group", group);
         return (
           <SingleHeatmap
             key={groupName}
@@ -281,7 +278,7 @@ function heatMapColor(value) {
 }
 
 function setColor(value, redLevel, orangeLevel) {
-  console.debug("value > redLevel", value, redLevel);
+  // console.debug("value > redLevel", value, redLevel);
   if (value > redLevel) {
     return hsl(350, 92, 51);
   } else if (redLevel >= value > orangeLevel) {

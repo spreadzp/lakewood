@@ -2,6 +2,7 @@ import React from "react";
 import {
   PlatformStateContext,
   NerdGraphQuery,
+  NerdletStateContext,
   Spinner,
   HeadingText,
   Button,
@@ -17,13 +18,14 @@ import {
   Input,
   Label,
   navigation,
+  nerdlet
 } from "nr1";
 import { timeRangeToNrql } from "@newrelic/nr1-community";
 
 import Heatmap from "./../../components/heat-map";
 import listQueries from "./../../queries.json";
 
-export default class UseNerdgraphNerdletNerdlet extends React.Component {
+export default class AlertNerdlet extends React.Component {
   constructor(props) {
     super(props);
     this.selectContainer = this.selectContainer.bind(this);
@@ -56,14 +58,14 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
     this.setState({ containerId });
   }
 
-  openEntity(entityGuid) {
+  openEntity(item) {
     const nerdletWithState = {
-      id: 'alerts',
+      id: 'details',
       urlState: {
-        foo: 'bar!',
+        itemQuery: item,
       },
     };
-    navigation.openStackedNerdlet(nerdletWithState);
+    return navigation.openStackedNerdlet(nerdletWithState);
   }
   selectAccount(option) {
     this.setState({ accountId: option.id, selectedAccount: option });
@@ -71,10 +73,7 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
 
   render() {
     const queries = listQueries;
-
     const { accountId, accounts, selectedAccount } = this.state;
-    const MEGABYTE = 1024 * 1024;
-    console.debug("@@@@@", { accountId, accounts, selectedAccount });
     //setInterval(() => {
     return (
       <Stack
@@ -91,7 +90,9 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
               /* Taking a peek at the PlatformState */
               const since = timeRangeToNrql(PlatformState);
               return (
-                <>
+                <NerdletStateContext.Consumer>
+                {(nerdletUrlState) => (
+
                   <Grid
                     className="primary-grid"
                     spacingType={[
@@ -106,8 +107,9 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
                       <main className="primary-content full-height">
                         {
 
-                            queries.map((item) => {
-                          console.debug("item", item);
+                          nerdletUrlState.selectedQuery.map((item) => {
+
+
                           return (
                             <Heatmap
                               accountId={accountId}
@@ -116,17 +118,19 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
                               title={item.title}
                               formatLabel={(c) => c.slice(0, 18)}
                               formatValue={(value) => `${value}`}
-                              selection={this.statecontainerId}
+                              selection={item.query}
                               max={item.value}
                               red={item.red}
                               orange={item.orange}
                               onSelect={(row) => {
                                 console.debug("onSelect", row); //eslint-disable-line
-                                this.openEntity(row);
+                                console.log('##########item :>> ', item);
+                                item.queryItem = item.queryItem + `'${row}'`;
+                                this.openEntity(item);
                               }}
-                              onClickTitle={(row) => {
-                                console.debug("onClickTitle", row); //eslint-disable-line
-                                this.openEntity(item.id);
+                              onClickTitle={(item) => {
+                                console.debug("onClickTitle", item); //eslint-disable-line
+                                this.openEntity(item);
                               }}
                             />
                           );
@@ -136,8 +140,10 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
                       </main>
                     </GridItem>
                   </Grid>
-                </>
+                  )}
+                  </NerdletStateContext.Consumer>
               );
+
             }}
           </PlatformStateContext.Consumer>
         </StackItem>

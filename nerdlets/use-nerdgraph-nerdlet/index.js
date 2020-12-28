@@ -2,29 +2,14 @@ import React from "react";
 import {
   PlatformStateContext,
   NerdGraphQuery,
-  Spinner,
-  HeadingText,
-  Button,
   Grid,
   GridItem,
   Stack,
   StackItem,
-  Select,
-  SelectItem,
-  AreaChart,
-  TableChart,
-  PieChart,
-  Input,
-  Label,
   navigation,
 } from "nr1";
 import { timeRangeToNrql } from "@newrelic/nr1-community";
-
-import Welcome from "./welcome";
-import AddItem from "./add-item";
-import RemoveItem from "./remove-item";
 import Heatmap from "./../../components/heat-map";
-import bytesToSize from "./../../lib/bytes-to-size";
 import listQueries from "./../../queries.json";
 
 export default class UseNerdgraphNerdletNerdlet extends React.Component {
@@ -40,7 +25,6 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
   }
 
   componentDidMount() {
-    const accountId = this.state;
     const gql = `{ actor { accounts { id name } } }`;
     const accounts = NerdGraphQuery.query({ query: gql });
     accounts
@@ -49,7 +33,6 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
         const accounts = results.data.actor.accounts.map((account) => {
           return account;
         });
-        const account = accounts.length > 0 && accounts[0];
         this.setState({ selectedAccount: 1104476, accounts });
       })
       .catch((error) => {
@@ -60,14 +43,14 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
     this.setState({ containerId });
   }
 
-  openEntity(entityGuid) {
+  openEntity(queryItem) {
     const nerdletWithState = {
-      id: 'alerts',
+      id: "alerts",
       urlState: {
-        foo: 'bar!',
+        selectedQuery: [queryItem],
       },
     };
-    navigation.openStackedNerdlet(nerdletWithState);
+    return navigation.openStackedNerdlet(nerdletWithState);
   }
   selectAccount(option) {
     this.setState({ accountId: option.id, selectedAccount: option });
@@ -77,7 +60,6 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
     const queries = listQueries;
 
     const { accountId, accounts, selectedAccount } = this.state;
-    const MEGABYTE = 1024 * 1024;
     console.debug("@@@@@", { accountId, accounts, selectedAccount });
     return (
       <Stack
@@ -108,7 +90,6 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
                     >
                       <main className="primary-content full-height">
                         {queries.map((item) => {
-                          console.debug("item", item);
                           return (
                             <Heatmap
                               accountId={accountId}
@@ -117,17 +98,17 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
                               title={item.title}
                               formatLabel={(c) => c.slice(0, 6)}
                               formatValue={(value) => `${94}%`}
-                              selection={this.statecontainerId}
+                              selection={item.query}
                               max={"100%"}
                               red={item.red}
                               orange={item.orange}
                               onSelect={(row) => {
                                 console.debug("onSelect", row); //eslint-disable-line
-                                this.openEntity(row);
+                                this.openEntity(item);
                               }}
                               onClickTitle={(row) => {
                                 console.debug("onClickTitle", row); //eslint-disable-line
-                                this.openEntity(row);
+                                this.openEntity(item);
                               }}
                             />
                           );
@@ -144,4 +125,3 @@ export default class UseNerdgraphNerdletNerdlet extends React.Component {
     );
   }
 }
-

@@ -14,7 +14,7 @@
     "subscription:list": "nr1 subscription:list"
   },
   "nr1": {
-    "uuid": "8aced860-b249-40a3-849a-958ade5d3e48"
+    "uuid": "f6c28fb5-2d49-4dc6-94ab-89b9dacca3ab"
   },
   "dependencies": {
     "prop-types": "^15.6.2",
